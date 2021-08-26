@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../../plantilla/plantilla.xhtml">
+
+            <ui:define name="content">
+                <h1>Datos de Vendedores</h1>
+
+                <h:form>
+                    <p:commandButton value="Agregar" 
+                                     oncomplete="PF('dialogNuevoVendedor').show()"
+                                     update=":formNuevoVendedor"
+                                     />
+                </h:form>
+
+                <h:form id="formMostrarVendedores">
+
+                    <p:dataTable id="tablaVendedor" value="#{empleadoController.listaTodosVendedores()}" var="item"
+                                 paginator="true" paginatorPosition="top" rows="10"
+                             emptyMessage="No hay Vendedores registrados"
+                             sortMode="single" sortOrder="" >
+                        <p:column sortBy="#{item.codvendedor}">
+                            <f:facet name="header">
+                                <h:outputText value="Codvendedor"/>
+                            </f:facet>
+                            <h:outputText value="#{item.codvendedor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nombre "/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombre} #{item.apellidos}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Dni"/>
+                            </f:facet>
+                            <h:outputText value="#{item.dni}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Celular"/>
+                            </f:facet>
+                            <h:outputText value="#{item.celular}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Direccion"/>
+                            </f:facet>
+                            <h:outputText value="#{item.direccion}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Opciones"/>
+                            </f:facet>
+                            <p:commandButton  value="Edit" oncomplete="PF('dialogModificarVendedor').show()"
+                                              update=":formModificarVendedor"
+                                              >
+                                <f:setPropertyActionListener target="#{empleadoController.vendedor}" value="#{item}"/>
+                            </p:commandButton>
+                            |
+                            <p:commandButton value="Delete" 
+                                             action="#{empleadoController.deleteVendedor(item)}"
+                                             onclick="return confirm('Esta seguro que quiere eliminar Vendedor?')"
+                                             />
+                        </p:column>
+                    </p:dataTable>
+
+                </h:form>
+
+                <h:form id="formNuevoVendedor">
+                    <p:dialog id="digNuevoCliente" widgetVar="dialogNuevoVendedor" resizable="false" 
+                              showEffect="explode" hideEffect="explode" modal="true">
+                        <p:panelGrid columns="2" style="margin: 0 auto">
+                            <p:outputLabel value="Nombre:" for="nombre" />
+                            <p:inputText id="nombre" value="#{empleadoController.vendedor.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
+                            <p:outputLabel value="Apellidos:" for="apellidos" />
+                            <p:inputText id="apellidos" value="#{empleadoController.vendedor.apellidos}" title="Apellidos" required="true" requiredMessage="The Apellidos field is required."/>
+                            <p:outputLabel value="Dni:" for="dni" />
+                            <p:inputText id="dni" value="#{empleadoController.vendedor.dni}" title="Dni" required="true" requiredMessage="The Dni field is required."/>
+                            <p:outputLabel value="Celular:" for="celular" />
+                            <p:inputText id="celular" value="#{empleadoController.vendedor.celular}" title="Celular" required="true" requiredMessage="The Celular field is required."/>
+                            <p:outputLabel value="Direccion:" for="direccion" />
+                            <p:inputText id="direccion" value="#{empleadoController.vendedor.direccion}" title="Direccion" required="true" requiredMessage="The Direccion field is required."/>
+
+                        </p:panelGrid>
+                        <p:commandButton value="GUARDAR" actionListener="#{empleadoController.addVendedor()}"
+                                         update=":formMostrarVendedores"
+                                         oncomplete="PF('dialogNuevoVendedor').hide()"
+                                         />
+
+                        <p:commandButton value="Cancelar" 
+                                         oncomplete="PF('dialogNuevoVendedor').hide()"
+                                         />
+                    </p:dialog>
+                </h:form>
+                
+                
+                   <h:form id="formModificarVendedor">
+                    <p:dialog id="digModificarCliente" widgetVar="dialogModificarVendedor" resizable="false" 
+                              showEffect="explode" hideEffect="explode" modal="true">
+                        <p:panelGrid columns="2" style="margin: 0 auto">
+                            <p:outputLabel value="Nombre:" for="nombre" />
+                            <p:inputText id="nombre" value="#{empleadoController.vendedor.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
+                            <p:outputLabel value="Apellidos:" for="apellidos" />
+                            <p:inputText id="apellidos" value="#{empleadoController.vendedor.apellidos}" title="Apellidos" required="true" requiredMessage="The Apellidos field is required."/>
+                            <p:outputLabel value="Dni:" for="dni" />
+                            <p:inputText id="dni" value="#{empleadoController.vendedor.dni}" title="Dni" required="true" requiredMessage="The Dni field is required."/>
+                            <p:outputLabel value="Celular:" for="celular" />
+                            <p:inputText id="celular" value="#{empleadoController.vendedor.celular}" title="Celular" required="true" requiredMessage="The Celular field is required."/>
+                            <p:outputLabel value="Direccion:" for="direccion" />
+                            <p:inputText id="direccion" value="#{empleadoController.vendedor.direccion}" title="Direccion" required="true" requiredMessage="The Direccion field is required."/>
+
+                        </p:panelGrid>
+                        <p:commandButton value="Modificar" actionListener="#{empleadoController.editVendedor()}"
+                                         update=":formMostrarVendedores"
+                                         oncomplete="PF('dialogModificarVendedor').hide()"
+                                         />
+
+                        <p:commandButton value="Cancelar" 
+                                         oncomplete="PF('dialogModificarVendedor').hide()"
+                                         />
+                    </p:dialog>
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../../plantilla/plantilla.xhtml">
+
+            <ui:define name="content">
+                <h1>Datos de Clientes</h1>
+                <h:form>
+                    <p:commandButton value="Agregar" 
+                                     oncomplete="PF('dialogNuevoCliente').show()"
+                                     update=":formNuevoCliente"
+                                     />
+                </h:form>
+
+
+                <h:form id="formMostrarClientes">
+
+                    <p:dataTable id="tablaVendedor" 
+                                 value="#{clienteController.listaTodosClientes()}"
+                                 var="item"
+                                 paginator="true"
+                                 paginatorPosition="top"
+                                 rows="10"
+                                 emptyMessage="No hay Clientes registrados">
+                        <p:column filterBy="#{item.codcliente}">
+                            <f:facet name="header">
+                                <h:outputText value="Codcliente"/>
+                            </f:facet>
+                            <h:outputText value="#{item.codcliente}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.nombre}">
+                            <f:facet name="header">
+                                <h:outputText value="Nombre"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombre}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.apellido}" >
+                            <f:facet name="header">
+                                <h:outputText value="Apellido"/>
+                            </f:facet>
+                            <h:outputText value="#{item.apellido}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.direccion}">
+                            <f:facet name="header">
+                                <h:outputText value="Direccion"/>
+                            </f:facet>
+                            <h:outputText value="#{item.direccion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Opciones"/>
+                            </f:facet>
+                            <p:commandButton  value="Edit" oncomplete="PF('dialogModificarCliente').show()"
+                                              update=":formModificarCliente"
+                                              >
+                                <f:setPropertyActionListener target="#{clienteController.cliente}" value="#{item}"/>
+                            </p:commandButton>
+                            |
+                            <p:commandButton value="Delete" 
+                                             action="#{clienteController.deleteCliente(item)}"
+                                             onclick="return confirm('Esta seguro que quiere eliminar Cliente?')"
+                                             />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+
+
+                <h:form id="formNuevoCliente">
+                    <p:dialog id="digNuevoCliente" widgetVar="dialogNuevoCliente" resizable="false" 
+                              showEffect="explode" hideEffect="explode" modal="true">
+                        <p:panelGrid columns="2" style="margin: 0 auto">
+                            <p:outputLabel value="Nombre:" for="nombre" />
+                            <p:inputText id="nombre" value="#{clienteController.cliente.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
+                            <p:outputLabel value="Apellido:" for="apellido" />
+                            <p:inputText id="apellido" value="#{clienteController.cliente.apellido}" title="Apellido" required="true" requiredMessage="The Apellido field is required."/>
+                            <p:outputLabel value="Direccion:" for="direccion" />
+                            <p:inputText id="direccion" value="#{clienteController.cliente.direccion}" title="Direccion" />
+                        </p:panelGrid>
+                        
+                        <p:commandButton value="GUARDAR" actionListener="#{clienteController.addCliente()}"
+                                         update=":formMostrarClientes"
+                                         oncomplete="PF('dialogNuevoCliente').hide()"
+                                         />
+
+                        <p:commandButton value="Cancelar" 
+                                         oncomplete="PF('dialogNuevoCliente').hide()"
+                                         />
+                    </p:dialog>
+                </h:form>
+                
+                
+                <h:form id="formModificarCliente">
+                    <p:dialog id="digModificarCliente" widgetVar="dialogModificarCliente" resizable="false" 
+                              showEffect="explode" hideEffect="explode" modal="true">
+                        <p:panelGrid columns="2" style="margin: 0 auto">
+                            <p:outputLabel value="Nombre:" for="nombre" />
+                            <p:inputText id="nombre" value="#{clienteController.cliente.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
+                            <p:outputLabel value="Apellido:" for="apellido" />
+                            <p:inputText id="apellido" value="#{clienteController.cliente.apellido}" title="Apellido" required="true" requiredMessage="The Apellido field is required."/>
+                            <p:outputLabel value="Direccion:" for="direccion" />
+                            <p:inputText id="direccion" value="#{clienteController.cliente.direccion}" title="Direccion" />
+                        </p:panelGrid>
+                        
+                        <p:commandButton value="Modificar" actionListener="#{clienteController.editCliente()}"
+                                         update=":formMostrarClientes"
+                                         oncomplete="PF('dialogModificarCliente').hide()"
+                                         />
+
+                        <p:commandButton value="Cancelar" 
+                                         oncomplete="PF('dialogModificarCliente').hide()"
+                                         />
+                    </p:dialog>
+                </h:form>
+
+
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

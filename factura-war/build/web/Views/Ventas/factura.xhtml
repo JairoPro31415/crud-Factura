@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../../plantilla/plantilla.xhtml">
+
+            <ui:define name="content">
+                <h2>Realizar Venta</h2>
+
+                <h:form id="formFactura">
+                    <p:panel header="---" style="width: 900px; margin: 0 auto; text-align: center ">
+
+                        <p:layout id="capaDatosClienteFactura" style="width: 100%; height: 150px">
+                            <p:layoutUnit id="datosCliente" position="center"
+                                          style="padding: 5px; text-align: justify; font-size: 14px" size="300">
+                                <h:panelGrid id="gridBuscarDatosCliente" columns="5">
+                                    <p:outputLabel value="Codigo Cliente" style="font-weight: bold"/>
+
+
+                                    <p:selectOneMenu id="cliente" value="#{clienteController.cliente.codcliente}">
+                                        <f:selectItem itemLabel="Selecione codigo Cliente"/>
+                                        <f:selectItems value="#{clienteController.listClientes}"/>
+                                        <f:ajax execute="cliente" render="gridDatosCliente"/>
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="Buscar" />
+                                    <p:commandButton value="..." oncomplete="PF('dialogClientes').show()"
+                                                     update=":formFactura:digClientes"/>
+
+                                    <p:outputLabel value="Fecha" style="font-weight: bold"/>
+                                    <p:outputLabel value="Fecha del Sistema" style="font-weight: bold"/>
+
+                                </h:panelGrid>
+                                <p:separator/>
+                                <h:panelGrid id="gridDatosCliente" columns="2">
+                                    <p:outputLabel value="Nombre: " style="font-weight: bold"/>
+                                    <p:outputLabel id="lbNombreCliente" value="#{clienteController.cliente.nombre}  #{clienteController.cliente.apellido}" />
+                                    <p:outputLabel value="Direccion: " style="font-weight: bold"/>
+                                    <p:outputLabel id="lbDireccionCliente" value="#{clienteController.cliente.direccion}" />
+
+                                </h:panelGrid>
+                            </p:layoutUnit>
+
+                            <p:layoutUnit id="datosFactura" position="east"
+                                          style="padding: 5px; text-align: center; font-size: 14px" size="200">
+                                <h:panelGrid columns="1" style="font-size: 24px;
+                                             font-weight:bold; margin-top: 30px; margin: 0 auto ">
+                                    FACTURA                                   
+                                    <p:outputLabel value="000001" />
+
+                                </h:panelGrid>
+
+
+                            </p:layoutUnit>
+                        </p:layout>
+                        <p:separator/>
+                        <h:panelGrid columns="3">
+                            <p:outputLabel value="Producto"/>
+                            <p:selectOneMenu id="producto" value="#{productoController.producto.codproducto}">
+                                <f:selectItem itemLabel="---Selecione---"/>
+                                <f:selectItems value="#{productoController.listProductos}"/>
+                                
+                            </p:selectOneMenu>
+                            <p:commandButton value="..." 
+                                             oncomplete="PF('dialogProductos').show()"
+                                             update=":formFactura:digProductos"/>
+                        </h:panelGrid>
+                        <p:separator/>
+
+                        <p:dataTable id="tablaProductoFactura">
+                            <p:column  headerText="Codigo Barra">
+
+                            </p:column>
+
+                            <p:column  headerText="Producto">
+
+                            </p:column>
+
+                            <p:column  headerText="Cantidad">
+
+                            </p:column>
+
+                            <p:column  headerText="Precio de Venta">
+
+                            </p:column>
+
+                            <p:column  headerText="Total">
+
+                            </p:column>
+
+
+
+                        </p:dataTable>
+                        <p:outputLabel value="Total de Venta"/>
+                        $
+                        <p:outputLabel value="total a vender"/>
+                        <p:separator/>
+                        <p:commandButton value="Registrar" style="width: 150px; height: 50px"/>
+                        <p:commandButton value="Imprimir" style="width: 150px; height: 50px"/>
+                        <p:commandButton value="Cancelar" style="width: 150px; height: 50px"/>
+                    </p:panel>
+
+                    <p:dialog id="digClientes" widgetVar="dialogClientes" 
+                              modal="true" resizable="false" showEffect="explode"
+                              hideEffect="explode"
+                              >
+                        <p:dataTable id="tablaCliente" value="#{clienteController.listaTodosClientes()}" var="item"
+                                     paginator="true"  style="width: 700px"
+                                     paginatorPosition="top" rows="10"
+                                     emptyMessage="No hay Clientes registrados">
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Codcliente"/>
+                                </f:facet>
+                                <h:outputText value="#{item.codcliente}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nombre"/>
+                                </f:facet>
+                                <h:outputText value="#{item.nombre}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Apellido"/>
+                                </f:facet>
+                                <h:outputText value="#{item.apellido}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Direccion"/>
+                                </f:facet>
+                                <h:outputText value="#{item.direccion}"/>
+                            </p:column>
+                            <p:column>
+
+
+                                <p:commandButton  value="Seleccionar" oncomplete="PF('dialogClientes').hide()"
+                                                  update=":formFactura:gridDatosCliente"
+                                                  >
+                                    <f:setPropertyActionListener target="#{clienteController.cliente}" value="#{item}"/>
+                                </p:commandButton>
+
+
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton value='cerrar' onclick="PF('dialogClientes').hide()"/>
+                    </p:dialog>
+
+                    <p:dialog id="digProductos" widgetVar="dialogProductos" 
+                              modal="true" resizable="false" showEffect="explode"
+                              hideEffect="explode"
+                              >
+                        <p:dataTable  id="tablaProducto" value="#{productoController.listaTodosProductos()}" var="item"
+                                      paginator="true"  style="width: 700px"
+                                      paginatorPosition="top" rows="10"
+                                      emptyMessage="No hay Productos registrados">
+                            <p:column filterBy="#{item.codproducto}">
+                                <f:facet name="header">
+                                    <h:outputText value="Codproducto"/>
+                                </f:facet>
+                                <h:outputText value="#{item.codproducto}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.nombre}">
+                                <f:facet name="header">
+                                    <h:outputText value="Nombre"/>
+                                </f:facet>
+                                <h:outputText value="#{item.nombre}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Precio"/>
+                                </f:facet>
+                                <h:outputText value="#{item.precio}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Stockactual"/>
+                                </f:facet>
+                                <h:outputText value="#{item.stockactual}"/>
+                            </p:column>
+                            <p:column filterBy="#{item.codigobarra}">
+                                <f:facet name="header">
+                                    <h:outputText value="Codigobarra"/>
+                                </f:facet>
+                                <h:outputText value="#{item.codigobarra}"/>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton  value="Seleccionar" oncomplete="PF('dialogProductos').hide()"
+                                                  update=":formFactura:tablaProducto"
+                                                  >
+                                    <f:setPropertyActionListener target="#{productoController.producto}" value="#{item}"/>
+                                </p:commandButton>
+
+
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton value='cerrar' onclick="PF('dialogProductos').hide()"/>
+                    </p:dialog>
+
+
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

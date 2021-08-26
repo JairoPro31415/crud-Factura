@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../../plantilla/plantilla.xhtml">
+
+            <ui:define name="content">
+                <h1>Datos  Productos</h1>
+
+                <h:form>
+                    <p:commandButton value="Agregar" 
+                                     oncomplete="PF('dialogNuevoProducto').show()"
+                                     update=":formNuevoProducto"
+                                     />
+                </h:form>
+
+
+
+                <h:form id="formMostrarProductos">
+
+                    <p:dataTable  id="tablaProducto" value="#{productoController.listaTodosProductos()}" var="item">
+                        <p:column filterBy="#{item.codproducto}">
+                            <f:facet name="header">
+                                <h:outputText value="Codproducto"/>
+                            </f:facet>
+                            <h:outputText value="#{item.codproducto}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.nombre}">
+                            <f:facet name="header">
+                                <h:outputText value="Nombre"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombre}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Precio"/>
+                            </f:facet>
+                            <h:outputText value="#{item.precio}"/>
+                        </p:column>
+                        
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Stockactual"/>
+                            </f:facet>
+                            <h:outputText value="#{item.stockactual}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.codigobarra}">
+                            <f:facet name="header">
+                                <h:outputText value="Codigobarra"/>
+                            </f:facet>
+                            <h:outputText value="#{item.codigobarra}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Opciones"/>
+                            </f:facet>
+                            <p:commandButton  value="Edit" oncomplete="PF('dialogModificarProducto').show()"
+                                              update=":formModificarProducto"
+                                              >
+                                <f:setPropertyActionListener target="#{productoController.producto}" value="#{item}"/>
+                            </p:commandButton>
+                            |
+                            <p:commandButton value="Delete" 
+                                             action="#{productoController.deleteCliente(item)}"
+                                             onclick="return confirm('Esta seguro que quiere eliminar Producto?')"
+                                             />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+
+
+                <h:form id="formNuevoProducto">
+                    <p:dialog id="digNuevoProducto" widgetVar="dialogNuevoProducto" resizable="false" 
+                              showEffect="explode" hideEffect="explode" modal="true">
+                        <p:panelGrid columns="2" style="margin: 0 auto">
+                            <p:outputLabel value="Nombre:" for="nombre" />
+                            <p:inputText id="nombre" value="#{productoController.producto.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
+                            <p:outputLabel value="Precio:" for="precio" />
+                            <p:inputText id="precio" value="#{productoController.producto.precio}" title="Precio" required="true" requiredMessage="The Precio field is required."/>
+                            <p:outputLabel value="Stockminimo:" for="stockminimo" />
+                            <p:inputText id="stockminimo" value="#{productoController.producto.stockminimo}" title="Stockminimo" required="true" requiredMessage="The Stockminimo field is required."/>
+                            <p:outputLabel value="Stockactual:" for="stockactual" />
+                            <p:inputText id="stockactual" value="#{productoController.producto.stockactual}" title="Stockactual" required="true" requiredMessage="The Stockactual field is required."/>
+                            <p:outputLabel value="Codigobarra:" for="codigobarra" />
+                            <p:inputText id="codigobarra" value="#{productoController.producto.codigobarra}" title="Codigobarra" required="true" requiredMessage="The Codigobarra field is required."/>
+                        </p:panelGrid>
+                        
+                        <p:commandButton value="GUARDAR" actionListener="#{productoController.addProducto()}"
+                                         update=":formMostrarProductos"
+                                         oncomplete="PF('dialogNuevoProducto').hide()"
+                                         />
+
+                        <p:commandButton value="Cancelar" 
+                                         oncomplete="PF('dialogNuevoProducto').hide()"
+                                         />
+                    </p:dialog>
+                    
+                    
+                </h:form>
+                
+                    <h:form id="formModificarProducto">
+                    <p:dialog id="digModificarProducto" widgetVar="dialogModificarProducto" resizable="false" 
+                              showEffect="explode" hideEffect="explode" modal="true">
+                        <p:panelGrid columns="2" style="margin: 0 auto">
+                            <p:outputLabel value="Nombre:" for="nombre" />
+                            <p:inputText id="nombre" value="#{productoController.producto.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
+                            <p:outputLabel value="Precio:" for="precio" />
+                            <p:inputText id="precio" value="#{productoController.producto.precio}" title="Precio" required="true" requiredMessage="The Precio field is required."/>
+                            <p:outputLabel value="Stockminimo:" for="stockminimo" />
+                            <p:inputText id="stockminimo" value="#{productoController.producto.stockminimo}" title="Stockminimo" required="true" requiredMessage="The Stockminimo field is required."/>
+                            <p:outputLabel value="Stockactual:" for="stockactual" />
+                            <p:inputText id="stockactual" value="#{productoController.producto.stockactual}" title="Stockactual" required="true" requiredMessage="The Stockactual field is required."/>
+                            <p:outputLabel value="Codigobarra:" for="codigobarra" />
+                            <p:inputText id="codigobarra" value="#{productoController.producto.codigobarra}" title="Codigobarra" required="true" requiredMessage="The Codigobarra field is required."/>
+                        </p:panelGrid>
+                        
+                        <p:commandButton value="Modificar" actionListener="#{productoController.editProducto()}"
+                                         update=":formMostrarProductos"
+                                         oncomplete="PF('dialogModificarProducto').hide()"
+                                         />
+
+                        <p:commandButton value="Cancelar" 
+                                         oncomplete="PF('dialogModificarProducto').hide()"
+                                         />
+                    </p:dialog>
+                    
+                    
+                </h:form>
+                
+
+
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
